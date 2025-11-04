@@ -1,4 +1,4 @@
-# 🚀 Space Blaster
+# 🚀 Space Invaders
 
 **Space Blaster** is a fast-paced, browser-based space shooter game built with **HTML5 Canvas**, **JavaScript (ES Modules)**, and **CSS3**.  
 Battle waves of enemies, defeat bosses, collect power-ups, and climb the leaderboard to become the top pilot in the galaxy!
