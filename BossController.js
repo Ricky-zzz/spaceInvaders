@@ -9,11 +9,11 @@ export default class BossController {
     this.boss = new Boss(canvas.width / 2 - 75, 80);
 
     
-    this.bulletInterval = 20;
+    this.bulletInterval = 10;
     this.bulletTimer = this.bulletInterval;
 
   
-    this.spreadInterval = 120;
+    this.spreadInterval = 60;
     this.spreadTimer = this.spreadInterval;
 
     this.bossDeathSound = new Audio("sounds/explode.mp3");

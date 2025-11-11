@@ -18,7 +18,7 @@ export default class EnemyController {
     BulletIntervalDefault;
     BulletInterval;
 
-    constructor(canvas, enemyBulletController, playerBulletController, fireRate = 40, numRows = 4) {
+    constructor(canvas, enemyBulletController, playerBulletController, fireRate = 20, numRows = 4) {
         this.canvas = canvas;
         this.enemyBulletController = enemyBulletController;
         this.playerBulletController = playerBulletController;

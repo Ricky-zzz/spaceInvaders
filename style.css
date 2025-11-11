@@ -104,7 +104,7 @@ h1 {
 
 /* ---------- Game Layout ---------- */
 .game-wrapper {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .game-wrapper.hidden {
@@ -123,12 +123,11 @@ h1 {
   width: 22vw; 
   min-width: 200px;
   max-width: 300px;
-
 }
 
 .game-board h4 {
   text-align: center;
-  font-size: clamp(0.6rem, 1vw, 0.9rem);
+  font-size: clamp(0.4rem, 1vw, 0.9rem);
   color: #00ffaa;
   border-bottom: 2px solid #FFCC00;
   padding-bottom: 1vh;
@@ -186,18 +185,23 @@ h1 {
 
 @media (max-width: 768px) {
   .game-wrapper {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    gap: 10px;
   }
 
   .game-board {
-    width: 20vw;
+    width: 80%;
     height: auto;
+    margin-bottom: 10px;
   }
 
   #game {
-    width: 70vw;
+    width: 85vw;
     height: auto;
+    max-width: 350px;
+    max-height: 550px;
+    border-width: 2px;
   }
 }
 
@@ -357,5 +361,337 @@ h1 {
 .stat-flashr {
   animation: statFlashr 0.5s ease;
 }
+.mobile-controls {
+  position: fixed;
+  bottom: 2vh;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.mobile-btn {
+  background: #111;
+  border: 2px solid #ffcc00;
+  color: #ffcc00;
+  border-radius: 50%;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  padding: 10px;
+  width: 60px;
+  height: 60px;
+  transition: 0.1s;
+}
+
+.mobile-btn:active {
+  background: #ffcc00;
+  color: #000;
+  transform: scale(0.95);
+  box-shadow: 0 0 10px #ffcc00;
+}
+
+/* ======= GAME ORIENTATION WRAPPER ======= */
+@media (max-width: 576px) {
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background: #000;
+  }
+
+  .game-orientation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vw;
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #000010 0%, #000 100%);
+    z-index: 5;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .start-screen,
+  .game-wrapper,
+  #result-screen,
+  #round-start {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Force .row to be horizontal */
+  .game-wrapper .row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  /* Force columns to not stack */
+  .game-wrapper .col-md-3,
+  .game-wrapper .col-md-8 {
+    flex: 0 0 auto !important;
+    width: auto !important;
+  }
+
+  .game-board {
+    width: 30vw !important;
+    height: auto;
+    min-width: 150px;
+  }
+
+  #game {
+    width: 60vw !important;
+    height: auto;
+  }
+
+  /* --- MOBILE CONTROLS --- */
+  .mobile-controls {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 2vh;
+    left: 0;
+    width: 100%;
+    padding: 0 2vw;
+    z-index: 10;
+  }
+
+  .controls-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .arrow-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arrow-mid {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0.4rem 0;
+  }
+
+  /* ✅ RIGHT CONTROLS (horizontal) */
+  .controls-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .mobile-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #0f0;
+    color: #0f0;
+    border-radius: 10px;
+    width: 55px;
+    height: 55px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    text-align: center;
+    transition: 0.2s;
+  }
+
+  .mobile-btn:active {
+    background: #0f0;
+    color: #000;
+  }
+
+}
+
+/* ======= GAME ORIENTATION WRAPPER ======= */
+@media (max-width: 576px) {
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background: #000;
+  }
+
+  .game-orientation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vw;
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #000010 0%, #000 100%);
+    z-index: 5;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .start-screen,
+  .game-wrapper,
+  #result-screen,
+  #round-start {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+  }
+  
+
+  /* Force .row to be horizontal */
+  .game-wrapper .row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  /* Force columns to not stack */
+  .game-wrapper .col-md-3,
+  .game-wrapper .col-md-8 {
+    flex: 0 0 auto !important;
+    width: auto !important;
+  }
+
+  .game-board {
+    width: 30vw !important;
+    height: auto;
+    min-width: 150px;
+  }
+
+  #game {
+    width: 60vw !important;
+    height: auto;
+  }
+
+  /* --- MOBILE CONTROLS --- */
+  .mobile-controls {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 2vh;
+    left: 0;
+    width: 100%;
+    padding: 0 2vw;
+    z-index: 10;
+  }
+
+  .controls-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .arrow-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arrow-mid {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0.4rem 0;
+  }
+
+  /* ✅ RIGHT CONTROLS (horizontal) */
+  .controls-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .mobile-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #0f0;
+    color: #0f0;
+    border-radius: 10px;
+    width: 55px;
+    height: 55px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    text-align: center;
+    transition: 0.2s;
+  }
+
+  .mobile-btn:active {
+    background: #0f0;
+    color: #000;
+  }
+
+  /* ===== MODAL FIXES ===== */
+  .modal {
+    position: fixed !important;
+  }
+
+  .modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1040 !important;
+  }
+
+  .modal.show {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+  }
+
+  .modal-dialog {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(90deg) !important;
+    transform-origin: center !important;
+    width: 90vw !important;
+    margin: 0 !important;
+  }
+
+  .modal-content {
+    width: 100% !important;
+  }
+
+  .leaderboard-modal,
+  .instruction-modal {
+    border: 2px solid #FFCC00 !important;
+    background-color: #111 !important;
+    color: #FFCC00 !important;
+  }
+}
+
+
+
+
+
+
+
+
 
 

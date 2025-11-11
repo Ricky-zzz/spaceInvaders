@@ -4,28 +4,29 @@ import BulletController from "./BulletController.js";
 import BossController from "./BossController.js";
 import PowerUpController from "./PowerUpController.js";
 import SoundManager from "./sound.js";
+import { initMobileControls } from "./mobileControls.js";
 
-//  SOUND MANAGER 
+// SOUND MANAGER 
 const sound = new SoundManager();
 
-//  BUTTON REFERENCES 
+// BUTTON REFERENCES 
 const startBtn = document.getElementById("start-btn");
 const mainMenuBtn = document.getElementById("main-menu-btn");
 const nextRoundBtn = document.getElementById("next-round-btn");
 const gameScreen = document.querySelector(".game-screen");
 const leaderboardBtn = document.getElementById("leaderboard-btn");
 
-//  CANVAS SETUP 
+// CANVAS SETUP 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 800;
 
-//  BACKGROUND 
+// BACKGROUND 
 const background = new Image();
 background.src = "images/space.png";
 
-//  GAME STATE VARS 
+// GAME STATE VARS 
 let playerBulletController;
 let enemyBulletController;
 let enemyCtrl;
@@ -43,11 +44,18 @@ window.score = 0;
 window.flashStat = flashStat;
 window.flashStatr = flashStatr;
 
-
 let enemyFireRate = 80;
 let enemyRows = 4;
 
-//  PLAYER NAME SETUP 
+const startScreen = document.querySelector(".start-screen");
+const menuItems = Array.from(startScreen.querySelectorAll("#player-name, .menu button"));
+
+const playerRef = { current: null };
+const currentMenuIndexRef = { value: 0 };
+
+initMobileControls(playerRef, startScreen, menuItems, currentMenuIndexRef, updateMenuFocus);
+
+// PLAYER NAME SETUP 
 const playerInput = document.getElementById("player-name");
 
 function generateRandomName() {
@@ -55,20 +63,13 @@ function generateRandomName() {
   const suffix = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
   return `Player-${suffix}`;
 }
-
-let storedName = localStorage.getItem("playerName");
-if (!storedName) {
-  storedName = generateRandomName();
-  localStorage.setItem("playerName", storedName);
-}
-playerInput.value = storedName;
+playerInput.value = generateRandomName();
 
 playerInput.addEventListener("input", () => {
   localStorage.setItem("playerName", playerInput.value);
 });
 
-
-//  SCOREBOARD 
+// SCOREBOARD 
 function updateScoreboard() {
   const scoreDisplay = document.getElementById("score");
   const levelDisplay = document.getElementById("level");
@@ -81,7 +82,7 @@ function updateScoreboard() {
   if (boostDisplay) boostDisplay.textContent = player?.boostCount ?? 0;
 }
 
-//  GAME RESET FUNCTION 
+// GAME RESET FUNCTION 
 function resetGame(resetLevel = false) {
   if (gameLoop) {
     clearInterval(gameLoop);
@@ -91,7 +92,7 @@ function resetGame(resetLevel = false) {
   if (resetLevel) {
     window.currentLevel = 1;
     window.score = 0;
-    enemyFireRate = 40;
+    enemyFireRate = 20;
     enemyRows = 4;
   }
 
@@ -102,7 +103,6 @@ function resetGame(resetLevel = false) {
   playerBulletController = new BulletController(canvas, 50, true, "images/bullet.png");
   enemyBulletController = new BulletController(canvas, 100, false, "images/enemybullet.png");
 
-  // === Boss or Normal Round ===
   isBossRound = window.currentLevel % 3 === 0;
   if (isBossRound) {
     bossCtrl = new BossController(canvas, enemyBulletController, playerBulletController);
@@ -113,12 +113,12 @@ function resetGame(resetLevel = false) {
   }
 
   player = new Player(canvas, 5, playerBulletController);
+  playerRef.current = player; 
   player.boostCount = 1;
-
   window.powerUpCtrl = new PowerUpController(canvas, player);
 }
 
-//  GAME LOOP 
+// GAME LOOP 
 function startGameLoop() {
   if (gameRunning) return;
   gameRunning = true;
@@ -126,6 +126,7 @@ function startGameLoop() {
 }
 
 function game() {
+  updatePlayerMovement();
   checkGameOver();
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   displayGameOver();
@@ -145,7 +146,7 @@ function game() {
   }
 }
 
-//  GAME OVER DISPLAY 
+// GAME OVER DISPLAY 
 function displayGameOver() {
   if (!isGameOver) return;
 
@@ -178,23 +179,23 @@ function displayGameOver() {
     mainMenuBtn.focus(); 
   }
 
-let resultHandled = false;
+  let resultHandled = false;
 
-function handleResultKey(e) {
-  if (resultHandled) return;
-  if (e.code === "Enter" || e.code === "Space") {
-    e.preventDefault();
-    resultHandled = true; 
-    if (didWIn) nextRoundBtn.click();
-    else mainMenuBtn.click();
-    document.removeEventListener("keydown", handleResultKey);
+  function handleResultKey(e) {
+    if (resultHandled) return;
+    if (e.code === "Enter" || e.code === "Space") {
+      e.preventDefault();
+      resultHandled = true; 
+      if (didWIn) nextRoundBtn.click();
+      else mainMenuBtn.click();
+      document.removeEventListener("keydown", handleResultKey);
+    }
   }
+
+  document.addEventListener("keydown", handleResultKey);
 }
 
-}
-
-
-//  GAME OVER CHECK 
+// GAME OVER CHECK 
 function checkGameOver() {
   if (isGameOver) return;
 
@@ -229,9 +230,9 @@ function checkGameOver() {
   }
 }
 
-// START GAME
+// START / MENU BUTTONS 
 startBtn.addEventListener("click", () => {
-  document.querySelector(".start-screen").classList.add("hidden");
+  startScreen.classList.add("hidden");
   document.querySelector(".game-wrapper").classList.remove("hidden");
   document.querySelector(".game-wrapper").classList.add("fade-in");
 
@@ -241,8 +242,7 @@ startBtn.addEventListener("click", () => {
     startGameLoop();
   });
 });
-  
-// MAIN MENU
+
 mainMenuBtn.addEventListener("click", () => {
   document.getElementById("result-screen").classList.add("hidden");
   startScreen.classList.remove("hidden");
@@ -253,7 +253,6 @@ mainMenuBtn.addEventListener("click", () => {
   updateMenuFocus();
 });
 
-
 nextRoundBtn.addEventListener("click", () => {
   document.getElementById("result-screen").classList.add("hidden");
   document.querySelector(".game-wrapper").classList.remove("hidden");
@@ -261,8 +260,8 @@ nextRoundBtn.addEventListener("click", () => {
   sound.fadeOut(sound.mainMenuMusic);
 
   window.currentLevel++;
-  enemyFireRate = Math.max(30, 80 - (window.currentLevel - 1) * 5);
-  enemyRows = Math.min(8, 6 + Math.floor((window.currentLevel - 1) / 2));
+  enemyFireRate = Math.max(5, 20 - (window.currentLevel - 1) * 5);
+  enemyRows = Math.min(10, 4 + Math.floor((window.currentLevel - 1) / 2));
 
   showRoundStart(() => {
     sound.playCombatMusic();
@@ -271,7 +270,7 @@ nextRoundBtn.addEventListener("click", () => {
   });
 });
 
-//  ROUND START EFFECT 
+// ROUND START EFFECT 
 function showRoundStart(callback) {
   const overlay = document.getElementById("round-start");
   const warningSound = new Audio("sounds/warning.mp3");
@@ -286,7 +285,7 @@ function showRoundStart(callback) {
   }, 2000);
 }
 
-//  SCREEN TILT EFFECT 
+// SCREEN TILT EFFECT 
 let currentTilt = 0;
 let targetTilt = 0;
 
@@ -296,6 +295,7 @@ function updateScreenTilt() {
   if (player.rightPressed) targetTilt = 4;       
   else if (player.leftPressed) targetTilt = -4;  
   else targetTilt = 0;                           
+
   currentTilt += (targetTilt - currentTilt) * 0.1;
   gameScreen.style.transform = `rotate(${currentTilt}deg)`;
 
@@ -303,14 +303,67 @@ function updateScreenTilt() {
 }
 requestAnimationFrame(updateScreenTilt);
 
-// menu nav
-const startScreen = document.querySelector(".start-screen");
-const menuItems = Array.from(
-  startScreen.querySelectorAll("#player-name, .menu button")
-);
+// MOUSE + KEYBOARD CONTROLS
+let mouseX = canvas.width / 2;
+let mouseY = canvas.height / 2;
+let isMouseActive = false;
 
+let keyLeftPressed = false;
+let keyRightPressed = false;
+
+// Mouse move
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+  mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+  isMouseActive = true;
+});
+
+// Mouse buttons
+canvas.addEventListener("mousedown", (e) => {
+  if (!player || isGameOver || !gameRunning) return;
+  if (e.button === 0) player.shootPressed = true;
+});
+canvas.addEventListener("mouseup", (e) => {
+  if (!player) return;
+  if (e.button === 0) player.shootPressed = false;
+});
+canvas.addEventListener("contextmenu", (e) => {
+  if (!player || isGameOver || !gameRunning) return;
+  e.preventDefault();
+  player.useBoost();
+});
+
+// Keyboard
+document.addEventListener("keydown", (e) => {
+  if (["ArrowLeft", "KeyA"].includes(e.code)) keyLeftPressed = true;
+  if (["ArrowRight", "KeyD"].includes(e.code)) keyRightPressed = true;
+});
+document.addEventListener("keyup", (e) => {
+  if (["ArrowLeft", "KeyA"].includes(e.code)) keyLeftPressed = false;
+  if (["ArrowRight", "KeyD"].includes(e.code)) keyRightPressed = false;
+});
+
+// Combined update
+function updatePlayerMovement() {
+  if (!player || isGameOver || !gameRunning) return;
+
+  let moveLeft = keyLeftPressed;
+  let moveRight = keyRightPressed;
+
+  if (isMouseActive) {
+    const playerCenterX = player.x + player.width / 2;
+    const tolerance = 3;
+    if (mouseX > playerCenterX + tolerance) moveRight = true;
+    else if (mouseX < playerCenterX - tolerance) moveLeft = true;
+  }
+
+  player.leftPressed = moveLeft;
+  player.rightPressed = moveRight;
+}
+
+// MENU NAVIGATION 
 let currentMenuIndex = 0;
-
 function updateMenuFocus() {
   menuItems.forEach((el, i) => {
     if (i === currentMenuIndex) {
@@ -323,13 +376,10 @@ function updateMenuFocus() {
 }
 
 updateMenuFocus();
-
 document.addEventListener("keydown", (event) => {
   if (startScreen.classList.contains("hidden")) return;
   const activeEl = document.activeElement;
-  if (activeEl.id === "player-name" && !["ArrowUp", "ArrowDown"].includes(event.code)) {
-    return;
-  }
+  if (activeEl.id === "player-name" && !["ArrowUp", "ArrowDown"].includes(event.code)) return;
 
   if (["ArrowDown", "ArrowRight"].includes(event.code)) {
     currentMenuIndex = (currentMenuIndex + 1) % menuItems.length;
@@ -343,49 +393,38 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-
+// FLASH STATS 
 function flashStat(id) {
   const el = document.getElementById(id);
   if (!el) return;
-
   el.classList.remove("stat-flash");
-  void el.offsetWidth; 
+  void el.offsetWidth;
   el.classList.add("stat-flash");
 }
-
-
 function flashStatr(id) {
   const el = document.getElementById(id);
   if (!el) return;
-
   el.classList.remove("stat-flashr");
-  void el.offsetWidth; 
+  void el.offsetWidth;
   el.classList.add("stat-flashr");
 }
 
-//  LEADERBOARD SYSTEM 
+// LEADERBOARD SYSTEM 
 function loadLeaderboard() {
   return JSON.parse(localStorage.getItem("leaderboard") || "[]");
 }
-
 function saveLeaderboard(leaderboard) {
   localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 }
-
 function updateLeaderboard(name, score) {
   let leaderboard = loadLeaderboard();
   const existing = leaderboard.find(p => p.name === name);
-  if (existing) {
-    existing.score = Math.max(existing.score, score);
-  } else {
-    leaderboard.push({ name, score });
-  }
-
+  if (existing) existing.score = Math.max(existing.score, score);
+  else leaderboard.push({ name, score });
   leaderboard.sort((a, b) => b.score - a.score);
   leaderboard = leaderboard.slice(0, 5);
   saveLeaderboard(leaderboard);
 }
-
 function renderLeaderboard() {
   const list = document.getElementById("leaderboard-list");
   const leaderboard = loadLeaderboard();
@@ -393,21 +432,16 @@ function renderLeaderboard() {
     ? leaderboard.map(p => `<li>${p.name} <span>${p.score}</span></li>`).join("")
     : "<li>No scores yet</li>";
 }
-
 document.getElementById("leaderboardModal").addEventListener("show.bs.modal", renderLeaderboard);
 
-//  SOUND INIT 
+// SOUND INIT 
 function initSound() {
   sound.playMainMenuMusic();
   window.removeEventListener("click", initSound);
   window.removeEventListener("keydown", initSoundOnKey);
 }
-
 function initSoundOnKey(e) {
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Space"].includes(e.code)) {
-    initSound();
-  }
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Enter","Space"].includes(e.code)) initSound();
 }
-
 window.addEventListener("click", initSound, { once: true });
 window.addEventListener("keydown", initSoundOnKey);
