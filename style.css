@@ -12,70 +12,87 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background: radial-gradient(circle at center, #000010 0%, #000 100%);
-    color: #FFCC00;
-    font-family: 'Press Start 2P', cursive;
-    height: 100vh;
-    overflow: hidden;
-    border: none;
-    outline: none;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at center, #000010 0%, #000 100%);
+  color: #FFCC00;
+  font-family: 'Press Start 2P', cursive;
+  height: 100vh;
+  overflow: hidden;
+  border: none;
+  outline: none;
 }
 
 /* ---------- Start Screen ---------- */
 .start-screen {
-    background: #111;
-    border: 3px solid #FFCC00;
-    padding: 50px 70px;
-    border-radius: 6px;
-    box-shadow: inset 0 0 12px #000, 0 0 20px rgba(0, 255, 153, 0.2);
-    text-align: center;
+  background: #111;
+  border: 3px solid #FFCC00;
+  padding: 50px 70px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 12px #000, 0 0 20px rgba(0, 255, 153, 0.2);
+  text-align: center;
 
-    animation: fadeIn 1.5s ease-in-out;
+  animation: fadeIn 1.5s ease-in-out;
 }
-.start-screen, .game-wrapper {
+
+.start-screen,
+.game-wrapper {
   position: relative;
   z-index: 1;
 }
 
 
 h1 {
-    font-size: 32px;
-    color: #FFCC00;
-    margin-bottom: 60px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 6px rgba(0, 255, 153, 0.3);
-    animation: flicker 2s infinite alternate;
+  font-size: 32px;
+  color: #FFCC00;
+  margin-bottom: 60px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 6px rgba(0, 255, 153, 0.3);
+  animation: flicker 2s infinite alternate;
 }
 
 @keyframes flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
-    20%, 24%, 55% { opacity: 0.4; }
+
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    opacity: 1;
+  }
+
+  20%,
+  24%,
+  55% {
+    opacity: 0.4;
+  }
 }
 
 .menu {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .menu button {
-    background: #1a1a1a;
-    border: 2px solid #FFCC00;
-    color: #FFCC00;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
-    padding: 15px 30px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
+  background: #1a1a1a;
+  border: 2px solid #FFCC00;
+  color: #FFCC00;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
 }
 
 .menu button:hover {
-    background: #FFCC00;
-    color: #000;
+  background: #FFCC00;
+  color: #000;
 }
+
 .menu button.selected,
 .menu button:focus {
   background: #FFCC00;
@@ -89,26 +106,27 @@ h1 {
 
 /* ---------- CRT Overlay (optional aesthetic) ---------- */
 .crt::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0px,
-        rgba(0, 255, 153, 0.04) 1px,
-        rgba(0, 0, 0, 0) 2px
-    );
-    pointer-events: none;
-    z-index: 10;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 255, 153, 0.04) 1px,
+      rgba(0, 0, 0, 0) 2px);
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* ---------- Game Layout ---------- */
 .game-wrapper {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .game-wrapper.hidden {
-    display: none !important;
+  display: none !important;
 }
 
 /* ---------- Solid Stat Board ---------- */
@@ -119,8 +137,8 @@ h1 {
   text-align: left;
   border-radius: 6px;
   box-shadow: inset 0 0 10px #000;
-  height: 40vh; 
-  width: 22vw; 
+  height: 40vh;
+  width: 22vw;
   min-width: 200px;
   max-width: 300px;
 }
@@ -171,8 +189,15 @@ h1 {
 
 /* ---------- Animations ---------- */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hidden {
@@ -209,7 +234,8 @@ h1 {
 /* ---------- Result Screen ---------- */
 #result-screen {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -240,14 +266,16 @@ h1 {
   border: 2px solid #0f0;
   background-color: #111;
   color: white;
-} 
+}
+
 /* ======== ROUND START OVERLAY ======== */
 #round-start {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.9), rgba(0,0,0,1));
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 1));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -333,18 +361,40 @@ h1 {
 
 
 @keyframes pulseText {
-  0% { opacity: 0.6; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.2); }
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
+
 .game-screen {
   transition: transform 0.2s ease-out;
   transform-origin: center;
 }
 
 @keyframes statFlash {
-  0% { color: #ffcc00; text-shadow: 0 0 6px #ffcc00; transform: scale(1.2); }
-  50% { color: #ffffff; text-shadow: 0 0 2px #fff; transform: scale(1); }
-  100% { color: #ffcc00; text-shadow: none; transform: scale(1); }
+  0% {
+    color: #ffcc00;
+    text-shadow: 0 0 6px #ffcc00;
+    transform: scale(1.2);
+  }
+
+  50% {
+    color: #ffffff;
+    text-shadow: 0 0 2px #fff;
+    transform: scale(1);
+  }
+
+  100% {
+    color: #ffcc00;
+    text-shadow: none;
+    transform: scale(1);
+  }
 }
 
 .stat-flash {
@@ -353,14 +403,29 @@ h1 {
 
 
 @keyframes statFlashr {
-  0% { color: #ff0000; text-shadow: 0 0 6px #ff0000; transform: scale(1.2); }
-  50% { color: #ffffff; text-shadow: 0 0 2px #fff; transform: scale(1); }
-  100% { color: #ff0000; text-shadow: none; transform: scale(1); }
+  0% {
+    color: #ff0000;
+    text-shadow: 0 0 6px #ff0000;
+    transform: scale(1.2);
+  }
+
+  50% {
+    color: #ffffff;
+    text-shadow: 0 0 2px #fff;
+    transform: scale(1);
+  }
+
+  100% {
+    color: #ff0000;
+    text-shadow: none;
+    transform: scale(1);
+  }
 }
 
 .stat-flashr {
   animation: statFlashr 0.5s ease;
 }
+
 .mobile-controls {
   position: fixed;
   bottom: 2vh;
@@ -390,9 +455,12 @@ h1 {
   box-shadow: 0 0 10px #ffcc00;
 }
 
+
 /* ======= GAME ORIENTATION WRAPPER ======= */
 @media (max-width: 576px) {
-  html, body {
+
+  html,
+  body {
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -417,139 +485,13 @@ h1 {
     justify-content: space-between;
   }
 
-  .start-screen,
+
   .game-wrapper,
   #result-screen,
   #round-start {
     width: 100%;
     height: 100%;
   }
-
-  /* Force .row to be horizontal */
-  .game-wrapper .row {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-  }
-
-  /* Force columns to not stack */
-  .game-wrapper .col-md-3,
-  .game-wrapper .col-md-8 {
-    flex: 0 0 auto !important;
-    width: auto !important;
-  }
-
-  .game-board {
-    width: 30vw !important;
-    height: auto;
-    min-width: 150px;
-  }
-
-  #game {
-    width: 60vw !important;
-    height: auto;
-  }
-
-  /* --- MOBILE CONTROLS --- */
-  .mobile-controls {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: absolute;
-    bottom: 2vh;
-    left: 0;
-    width: 100%;
-    padding: 0 2vw;
-    z-index: 10;
-  }
-
-  .controls-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .arrow-grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .arrow-mid {
-    display: flex;
-    justify-content: center;
-    gap: 0.4rem;
-    margin: 0.4rem 0;
-  }
-
-  /* ✅ RIGHT CONTROLS (horizontal) */
-  .controls-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .mobile-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #0f0;
-    color: #0f0;
-    border-radius: 10px;
-    width: 55px;
-    height: 55px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.8rem;
-    text-align: center;
-    transition: 0.2s;
-  }
-
-  .mobile-btn:active {
-    background: #0f0;
-    color: #000;
-  }
-
-}
-
-/* ======= GAME ORIENTATION WRAPPER ======= */
-@media (max-width: 576px) {
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    background: #000;
-  }
-
-  .game-orientation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vh;
-    height: 100vw;
-    transform: rotate(90deg) translateY(-100%);
-    transform-origin: top left;
-    overflow: hidden;
-    background: radial-gradient(circle at center, #000010 0%, #000 100%);
-    z-index: 5;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .start-screen,
-  .game-wrapper,
-  #result-screen,
-  #round-start {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-  }
-  
 
   /* Force .row to be horizontal */
   .game-wrapper .row {
@@ -659,8 +601,8 @@ h1 {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 90vw !important;
+    height: 90vh !important;
     z-index: 1050 !important;
   }
 
@@ -674,8 +616,25 @@ h1 {
     margin: 0 !important;
   }
 
+
   .modal-content {
     width: 100% !important;
+  }
+
+  .modal-content p,
+  .modal-content li {
+    font-size: clamp(10px, 2vw, 14px);
+    line-height: 1.4;
+  }
+
+  .modal-content h5,
+  .modal-title {
+    font-size: clamp(12px, 3vw, 18px);
+  }
+
+  .modal-content button {
+    font-size: clamp(10px, 2vw, 14px);
+    padding: clamp(6px, 2vw, 10px) clamp(10px, 3vw, 16px);
   }
 
   .leaderboard-modal,
@@ -684,14 +643,45 @@ h1 {
     background-color: #111 !important;
     color: #FFCC00 !important;
   }
+
+  .start-screen {
+    transform: scale(0.75);
+    transform-origin: center center;
+    padding: 10px 25px;
+    left: 25%;
+  }
+
+  .start-screen h1 {
+    max-width: 400px;
+    max-height: 350px;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .player-form {
+    padding: 15px 15px;
+    gap: 6px;
+    width: 85%;
+    margin-left: 15px;
+  }
+
+  .player-form label {
+    font-size: 10px;
+  }
+
+  #player-name {
+    width: 100%;
+    padding: 6px;
+    font-size: 10px;
+  }
+
+  .menu {
+    gap: 12px;
+  }
+
+  .menu button {
+    font-size: 10px;
+    padding: 8px 12px;
+    width: 60%;
+  }
 }
-
-
-
-
-
-
-
-
-
-
