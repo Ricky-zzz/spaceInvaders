@@ -348,10 +348,10 @@ document.addEventListener("keyup", (e) => {
 function updatePlayerMovement() {
   if (!player || isGameOver || !gameRunning) return;
 
-  let moveLeft = keyLeftPressed;
-  let moveRight = keyRightPressed;
+  let moveLeft = keyLeftPressed || player.leftPressed; 
+  let moveRight = keyRightPressed || player.rightPressed; 
 
-  if (isMouseActive) {
+  if (!moveLeft && !moveRight && isMouseActive) {
     const playerCenterX = player.x + player.width / 2;
     const tolerance = 3;
     if (mouseX > playerCenterX + tolerance) moveRight = true;
@@ -361,6 +361,7 @@ function updatePlayerMovement() {
   player.leftPressed = moveLeft;
   player.rightPressed = moveRight;
 }
+
 
 // MENU NAVIGATION 
 let currentMenuIndex = 0;
