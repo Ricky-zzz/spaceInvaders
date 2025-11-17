@@ -18,7 +18,7 @@ export default class EnemyController {
     BulletIntervalDefault;
     BulletInterval;
 
-    constructor(canvas, enemyBulletController, playerBulletController, fireRate = 20, numRows = 4) {
+    constructor(canvas, enemyBulletController, playerBulletController, fireRate = 30, numRows = 4) {
         this.canvas = canvas;
         this.enemyBulletController = enemyBulletController;
         this.playerBulletController = playerBulletController;
@@ -77,12 +77,24 @@ export default class EnemyController {
             this.BulletInterval = this.BulletIntervalDefault;
             const allEnemies = this.enemyRows.flat();
             if (allEnemies.length === 0) return;
-            const enemyIndex = Math.floor(Math.random() * allEnemies.length);
-            const enemy = allEnemies[enemyIndex];
-            if (enemy) {
-                this.enemyBulletController.shoot(enemy.x, enemy.y, 3);
-                this.enemyShootSound.currentTime = 0;
-                this.enemyShootSound.play();
+            
+            const numBullets = Math.min(3, allEnemies.length);
+            const usedIndices = new Set();
+            
+            for (let i = 0; i < numBullets; i++) {
+                let enemyIndex;
+                do {
+                    enemyIndex = Math.floor(Math.random() * allEnemies.length);
+                } while (usedIndices.has(enemyIndex));
+                
+                usedIndices.add(enemyIndex);
+                const enemy = allEnemies[enemyIndex];
+                
+                if (enemy) {
+                    this.enemyBulletController.shoot(enemy.x, enemy.y, 3);
+                    this.enemyShootSound.currentTime = 0;
+                    this.enemyShootSound.play();
+                }
             }
         }
     }

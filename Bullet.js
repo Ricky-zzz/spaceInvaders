@@ -6,8 +6,8 @@ export default class Bullet {
     this.velocityY = velocityY;
     this.velocityX = velocityX; 
 
-    this.width = 20;
-    this.height = 20;
+    this.width = 15;
+    this.height = 15;
 
     this.image = new Image();
     this.image.src = imagePath;

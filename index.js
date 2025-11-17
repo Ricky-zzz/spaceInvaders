@@ -92,7 +92,7 @@ function resetGame(resetLevel = false) {
   if (resetLevel) {
     window.currentLevel = 1;
     window.score = 0;
-    enemyFireRate = 20;
+    enemyFireRate = 30;
     enemyRows = 4;
   }
 
@@ -112,7 +112,7 @@ function resetGame(resetLevel = false) {
     bossCtrl = null;
   }
 
-  player = new Player(canvas, 5, playerBulletController);
+  player = new Player(canvas, 4, playerBulletController);
   playerRef.current = player; 
   player.boostCount = 1;
   window.powerUpCtrl = new PowerUpController(canvas, player);
@@ -306,7 +306,8 @@ requestAnimationFrame(updateScreenTilt);
 // MOUSE + KEYBOARD CONTROLS
 let mouseX = canvas.width / 2;
 let mouseY = canvas.height / 2;
-let isMouseActive = false;
+let lastMouseMoveTime = 0;
+const MOUSE_TIMEOUT = 100; // ms before mouse becomes inactive
 
 let keyLeftPressed = false;
 let keyRightPressed = false;
@@ -316,7 +317,7 @@ canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
   mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
   mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
-  isMouseActive = true;
+  lastMouseMoveTime = Date.now();
 });
 
 // Mouse buttons
@@ -336,8 +337,14 @@ canvas.addEventListener("contextmenu", (e) => {
 
 // Keyboard
 document.addEventListener("keydown", (e) => {
-  if (["ArrowLeft", "KeyA"].includes(e.code)) keyLeftPressed = true;
-  if (["ArrowRight", "KeyD"].includes(e.code)) keyRightPressed = true;
+  if (["ArrowLeft", "KeyA"].includes(e.code)) {
+    keyLeftPressed = true;
+    lastMouseMoveTime = 0; // Disable mouse control when keyboard is used
+  }
+  if (["ArrowRight", "KeyD"].includes(e.code)) {
+    keyRightPressed = true;
+    lastMouseMoveTime = 0; // Disable mouse control when keyboard is used
+  }
 });
 document.addEventListener("keyup", (e) => {
   if (["ArrowLeft", "KeyA"].includes(e.code)) keyLeftPressed = false;
@@ -348,14 +355,29 @@ document.addEventListener("keyup", (e) => {
 function updatePlayerMovement() {
   if (!player || isGameOver || !gameRunning) return;
 
-  let moveLeft = keyLeftPressed || player.leftPressed; 
-  let moveRight = keyRightPressed || player.rightPressed; 
+  let moveLeft = false;
+  let moveRight = false;
 
-  if (!moveLeft && !moveRight && isMouseActive) {
+  // Check if any keyboard keys are pressed
+  const keyboardActive = keyLeftPressed || keyRightPressed;
+  
+  // Check if mouse is recently active
+  const mouseActive = (Date.now() - lastMouseMoveTime) < MOUSE_TIMEOUT;
+
+  if (keyboardActive) {
+    // Keyboard takes priority
+    moveLeft = keyLeftPressed || player.leftPressed;
+    moveRight = keyRightPressed || player.rightPressed;
+  } else if (mouseActive) {
+    // Use mouse control only if keyboard is not active
     const playerCenterX = player.x + player.width / 2;
-    const tolerance = 3;
+    const tolerance = 5;
     if (mouseX > playerCenterX + tolerance) moveRight = true;
     else if (mouseX < playerCenterX - tolerance) moveLeft = true;
+  } else {
+    // Use mobile/touch controls if available
+    moveLeft = player.leftPressed;
+    moveRight = player.rightPressed;
   }
 
   player.leftPressed = moveLeft;

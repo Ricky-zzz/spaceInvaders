@@ -9,8 +9,8 @@ export default class Player {
         this.canvas = canvas;
         this.velocity = velocity;
         this.bulletController = bulletController;
-        this.width = 50;
-        this.height = 58;
+        this.width = 40;
+        this.height = 48;
         this.x = (this.canvas.width - this.width) / 2;
         this.y = this.canvas.height - this.height - 30;
         this.lives = 3;
@@ -19,7 +19,7 @@ export default class Player {
         this.isBoostActive = false;
         this.boostTimer = 0;
         this.normalVelocity = velocity;
-        this.boostDuration = 600;
+        this.boostDuration = 300;
         this.isImmune = false;
         this.isHit = false;
         this.flashTimer = 0;
@@ -60,10 +60,10 @@ export default class Player {
                 this.bulletController.shoot(this.x + this.width / 2 - 35, this.y + 5, -6);
                 this.bulletController.shoot(this.x + this.width / 2 - 10, this.y + 5, -6);
                 this.bulletController.shoot(this.x + this.width / 2 + 15, this.y + 5, -6);
-                this.bulletController.bulletInterval = 15;
+                this.bulletController.bulletInterval = 20;
             } else {
                 this.bulletController.shoot(this.x + this.width / 2 - 10, this.y, -4);
-                this.bulletController.bulletInterval = 25;
+                this.bulletController.bulletInterval = 40;
             }
         }
 
